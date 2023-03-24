@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Zombie : MonoBehaviour {
@@ -32,6 +30,7 @@ public class Zombie : MonoBehaviour {
         body.AddForce(direction.normalized * force, ForceMode.Impulse);
 
         //Controller Vibration
+
 
         //Trigger death animation
         Destroy(this.gameObject, deathSpan);
