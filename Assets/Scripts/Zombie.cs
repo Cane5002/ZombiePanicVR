@@ -10,13 +10,38 @@ public class Zombie : MonoBehaviour {
     public int damage = 1;
     public float speed = 10f;
     public float deathSpan = 1f;
+    public float stopDistance = 1f;
+
+    private bool living = true;
 
     public void Awake() {
         zombieRigidbody = GetComponent<Rigidbody>();
     }
 
+    //Zombie Movement
+    private void FixedUpdate() {
+
+        if (living) {
+            //Get target movement vector
+            Vector3 playerPosition = new Vector3();
+            UnitManager.Instance.GetPlayerPosition(ref playerPosition);
+            playerPosition.y = transform.position.y;
+
+            //Rotate towards player
+            transform.LookAt(playerPosition);
+
+            //Move towards player
+            if ((playerPosition - transform.position).magnitude > stopDistance) transform.position = Vector3.MoveTowards(transform.position, playerPosition, speed * Time.deltaTime);
+        }
+
+    }
+
+
     //On hit with blunt weapons (head flies off)
     public void Club(Vector3 direction, float force) {
+
+        living = false;
+
         //Split head and body
         alive.SetActive(false);
         dead.SetActive(true);
@@ -35,6 +60,5 @@ public class Zombie : MonoBehaviour {
         //Trigger death animation
         Destroy(this.gameObject, deathSpan);
     }
-
 
 }
